@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+
+// GRPC options
+option java_multiple_files = true;
+option java_package = "temperature.service2";
+option java_outer_classname = "Service2_Impl";
+
+
+package Smart.HR_Office;
+
+
+// service definition
+service Room_Temperature_control{
+
+// Server Streaming RPC
+  rpc SetRoomTemperature(TemperatureRequest) returns (stream TemperatureResponse) {}
+
+// unary RPC
+  rpc ShowRoomTemperature(RoomTemperatureRequest) returns (RoomTemperatureResponse) {}
+
+// Bidirectional streaming RPC
+  rpc AdjustRoomTemperature(stream AdjustRoomTemperatureRequest) returns (stream AdjustRoomTemperatureResponse) {}
+
+
+
+}
+
+// message for showRoomTemperature
+
+message RoomTemperatureRequest {
+  int32 room_number = 1;
+}
+
+message RoomTemperatureResponse {
+  double temperature = 1;
+  string message = 2;
+}
+
+
+
+// message for setRoomTemperature
+
+message TemperatureRequest {
+  int32 set_room_number = 1;
+  double set_temperature = 2;
+}
+
+message TemperatureResponse {
+  double current_temperature = 1;
+    string message = 2;
+}
+
+
+// message for adjustRoomTemperature
+
+message AdjustRoomTemperatureRequest {
+  int32 adj_room_number = 1;
+  double temperature_adjustment = 2;
+}
+
+message AdjustRoomTemperatureResponse {
+  int32 new_adj_temperature = 1;
+    string message = 2;
+}
+

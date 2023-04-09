@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+
+// GRPC options
+
+option java_multiple_files = true;
+option java_package = "meeting.service1";
+option java_outer_classname = "Service1_Impl";
+
+
+package Smart.HR_Office;
+
+
+// service definition
+
+service Schedule_Meeting{
+
+// Client Streaming RPC
+  rpc CreateMeeting(stream CreateMeetingRequest) returns (CreateMeetingResponse) {}
+
+// bidirectional streaming RPC
+  rpc ModifyMeeting (stream ModifyMeetingRequest) returns (stream ModifyMeetingResponse) {}
+
+// Server streaming RPC
+  rpc CancelMeeting(CancelMeetingRequest) returns (stream CancelMeetingResponse){}
+
+
+}
+
+
+// message for CreateMeeting
+message CreateMeetingRequest {
+  string organizer_id = 1;
+  string title = 2;
+  int64 start_time = 3;
+
+}
+
+message CreateMeetingResponse {
+  string meeting_id = 1;
+    string message = 2;
+}
+
+
+
+// message for modifyMeeting
+
+message UpdateMessage {
+  string session_id = 1;
+  repeated string updates = 2; // kind of array
+}
+
+message ModifyMeetingRequest {
+  string modi_meeting_id = 1;
+  UpdateMessage updates = 2;
+}
+
+message ModifyMeetingResponse {
+  bool successModify = 1;
+  string message = 2;
+}
+
+
+
+// message cancelMeeting
+message CancelMeetingRequest {
+  string cancel_meeting_id = 1;
+}
+
+message CancelMeetingResponse {
+  string successCancel = 1;
+  string error_message = 2;
+}
+
+
+
+
+
+
+

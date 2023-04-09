@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+
+// GRPC options
+option java_multiple_files = true;
+option java_package = "onboarding.service3";
+option java_outer_classname = "Service3_Impl";
+
+
+package Smart.HR_Office;
+
+
+// service definition
+
+service Onboarding_employees{
+
+
+// bidirectional streamin RPC
+  rpc OnboardEmployee(stream OnboardingRequest) returns (stream OnboardingResponse){}
+
+// Unary RPC
+  rpc CreateEmployee(CreateEmployeeRequest) returns (CreateEmployeeResponse) {}
+
+// client streaming RPC
+  rpc CheckEmployeeStatus(stream EmployeeStatusRequest) returns (EmployeeStatusResponse) {}
+
+
+
+
+}
+
+
+// message for onboardEmployee
+
+message Employee {
+  string name = 1;
+  string email = 2;
+  int32 age = 3;
+}
+
+message OnboardingRequest {
+  Employee employee = 1;
+}
+
+message OnboardingResponse {
+  bool is_onboarded = 1;
+  string message = 2;
+}
+
+  // message for createNewEmployee
+
+message CreateEmployeeRequest {
+  string username = 1;
+  string password = 2;
+
+}
+
+message CreateEmployeeResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+
+  // message for checkOnboardingStatus
+
+message EmployeeStatusRequest {
+  string employee_id = 1;
+}
+
+message EmployeeStatusResponse {
+  string employee_id = 1;
+  bool is_employee_active = 2;
+}
+
+
+
+
+
+
+
+
+
+
+
+
