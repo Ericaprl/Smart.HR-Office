@@ -1,3 +1,11 @@
+/* 
+ * Class: Gui Client
+ * Author @Erica Pereira 
+ * Smart HR office 
+ * gRpc API 
+ * 
+ */
+
 package Client;
 
 import java.awt.EventQueue;
@@ -70,6 +78,8 @@ import temperature.service2.Room_Temperature_controlGrpc.Room_Temperature_contro
 import javax.swing.JTextArea;
 import javax.swing.JScrollBar;
 
+
+// Class with client RPC side implementation and GUI 
 public class GuiClient extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -98,9 +108,11 @@ public class GuiClient extends JFrame {
 	 */
 	public static void main(String[] args) {
 
+		// calling JmDNS client side 
 		testClientJMDNS();
 
 
+		// create the Channel between client and server
 		clientChannel1 = ManagedChannelBuilder.forAddress(host, 9099).usePlaintext().build();
 		nonblockingstub = Schedule_MeetingGrpc.newStub(clientChannel1);
 
@@ -113,6 +125,7 @@ public class GuiClient extends JFrame {
 		nonblockingstub3 = Onboarding_employeesGrpc.newStub(clientChannel3);
 		
 
+		// calling the Gui to be visible 
 		EventQueue.invokeLater(new Runnable() {
 
 			public void run() {
@@ -152,6 +165,8 @@ public class GuiClient extends JFrame {
 		contentPane.setLayout(null);
 
 		contentPane.setVisible(true);
+		
+		// Label Servers 
 
 		JLabel labelServer = new JLabel("Servers");
 		labelServer.setForeground(new Color(254, 255, 255));
@@ -160,6 +175,8 @@ public class GuiClient extends JFrame {
 		labelServer.setBounds(47, 36, 76, 28);
 		contentPane.add(labelServer);
 
+		// Drop down list to select the server 
+		
 		comboBoxServer = new JComboBox<String>();
 
 		comboBoxServer.setMaximumRowCount(3);
@@ -172,13 +189,19 @@ public class GuiClient extends JFrame {
 		comboBoxServer.addItem("Server 2 - Room Temperature");
 		comboBoxServer.addItem("Server 3 - Onboarding");
 
+		
+		
 		JLabel labelServices = new JLabel("Services");
 		labelServices.setForeground(new Color(254, 255, 255));
 		labelServices.setFont(new Font("Euphemia UCAS", Font.PLAIN, 20));
 		labelServices.setHorizontalAlignment(SwingConstants.CENTER);
 		labelServices.setBounds(322, 40, 91, 20);
 		contentPane.add(labelServices);
-
+		
+		
+		
+		// Drop-down list where one depends on each other to select the service
+		
 		comboBoxServices = new JComboBox<String>();
 		comboBoxServices.setFont(new Font("Euphemia UCAS", Font.PLAIN, 14));
 		comboBoxServices.setMaximumRowCount(9);
@@ -186,8 +209,7 @@ public class GuiClient extends JFrame {
 		contentPane.add(comboBoxServices);
 		
    
-
-
+		// implement the Action Listener 
 		comboBoxServer.addActionListener(new ActionListener() {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
@@ -222,11 +244,14 @@ public class GuiClient extends JFrame {
 		btnConfirm.setBounds(170, 173, 123, 40);
 		contentPane.add(btnConfirm);
 
+		
+		// Text area will show the information such as the terminal 
 		JTextArea textArea = new JTextArea();
 		textArea.setFont(new Font("Euphemia UCAS", Font.PLAIN, 14));
 		textArea.setBounds(22, 281, 446, 150);
 		contentPane.add(textArea);
 
+		// Scrool pane in case of the information are bigger than my contente pane
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		scrollPane.setBounds(16, 237, 452, 220);
 		contentPane.add(scrollPane);
@@ -238,15 +263,22 @@ public class GuiClient extends JFrame {
 		scrollBar.setBackground(new Color(255, 125, 120));
 		scrollBar.setBounds(438, 281, 30, 106);
 		contentPane.add(scrollBar);
+		
+		// Implement the Action Listener to Confirm button 
+		
 
 		btnConfirm.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 
-				String selectedService = (String) comboBoxServices.getSelectedItem(); // Update the variable name
-
+				String selectedService = (String) comboBoxServices.getSelectedItem(); 
+				
+				// Logic 
+				
+				// RCP Create Meeting
 				if (selectedService.equals("Create Meeting")) {
 
+					// Call to run the server 
 					new Thread(() -> {
 						try {
 							Server1_meeting.main(new String[] {});
@@ -255,6 +287,7 @@ public class GuiClient extends JFrame {
 						}
 					}).start();
 
+					// make it sleep until the server is completely on
 					try {
 						Thread.sleep(20000);
 
@@ -262,10 +295,15 @@ public class GuiClient extends JFrame {
 						e1.printStackTrace();
 					}
 
+					// Calling the RCP client method 
 					createMeeting();
-
+					
+					
+					
+					// RCP Modify Meeting
 				} else if (selectedService.equals("Modify Meeting")) {
 
+					// Call to run the server 
 					new Thread(() -> {
 						try {
 							Server1_meeting.main(new String[] {});
@@ -275,16 +313,21 @@ public class GuiClient extends JFrame {
 					}).start();
 
 					try {
+						// make it sleep until the server is completely on
 						Thread.sleep(20000);
 
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
-
+					// Calling the RCP client method 
 					modifyMeeting();
+					
+					
+					
+					// RPC Cancel Meeting
 
 				} else if (selectedService.equals("Cancel Meeting")) {
-
+					// Call to run the server 
 					new Thread(() -> {
 						try {
 							Server1_meeting.main(new String[] {});
@@ -294,15 +337,21 @@ public class GuiClient extends JFrame {
 					}).start();
 
 					try {
+						// make it sleep until the server is completely on
+
 						Thread.sleep(20000);
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
-
+					
+					// Calling the RCP client method 
 					cancelMeeting();
 
+					
+					
+					// RCP Set Room Temperature
 				} else if (selectedService.equals("Set Room Temperature")) {
-
+					// Call to run the server 
 					new Thread(() -> {
 						try {
 							Server2_Temperature.main(new String[] {});
@@ -311,17 +360,25 @@ public class GuiClient extends JFrame {
 						}
 					}).start();
 
+					// make it sleep until the server is completely on
 					try {
 						Thread.sleep(20000);
 
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
-
+					
+					// Calling the RCP client method 
 					setRoomTemperature();
 
+					
+					
+					
+					
+					// RCP Show Room Temperature
 				} else if (selectedService.equals("Show Room Temperature")) {
 
+					// Call to run the server 
 					new Thread(() -> {
 						try {
 							Server2_Temperature.main(new String[] {});
@@ -329,17 +386,25 @@ public class GuiClient extends JFrame {
 							e1.printStackTrace();
 						}
 					}).start();
-
+					
+					// make it sleep until the server is completely on
 					try {
 						Thread.sleep(20000);
 
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
+					
+					// Calling the RCP client method 
 					showRoomTemperature();
 
+					
+					
+					
+					// RCP Adjust Room Temperature
 				} else if (selectedService.equals("Adjust Room Temperature")) {
 
+					// Call to run the server 
 					new Thread(() -> {
 						try {
 							Server2_Temperature.main(new String[] {});
@@ -348,17 +413,24 @@ public class GuiClient extends JFrame {
 						}
 					}).start();
 
+					// make it sleep until the server is completely on
 					try {
 						Thread.sleep(20000);
 
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
-
+					
+					// Calling the RCP client method 
 					adjustRoomTemperature();
-
+					
+					
+					
+					
+					// RCP Create Employee
 				} else if (selectedService.equals("Create Employee")) {
 
+					// Call to run the server 
 					new Thread(() -> {
 						try {
 							Server3_Onboarding.main(new String[] {});
@@ -367,17 +439,22 @@ public class GuiClient extends JFrame {
 						}
 					}).start();
 
+					// make it sleep until the server is completely on
 					try {
 						Thread.sleep(20000);
 
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
-
+					
+					// Calling the RCP client method 
 					createEmployee();
 
+					
+					// RCP Check Employee Status
 				} else if (selectedService.equals("Check Employee Status")) {
 
+					// Call to run the server 
 					new Thread(() -> {
 						try {
 							Server3_Onboarding.main(new String[] {});
@@ -386,17 +463,24 @@ public class GuiClient extends JFrame {
 						}
 					}).start();
 
+					// make it sleep until the server is completely on
 					try {
 						Thread.sleep(20000);
 
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
-
+					
+					// Calling the RCP client method 
 					checkEmployeeStatus();
-
+					
+					
+					
+					
+					// RCP Onboard Employee
 				} else if (selectedService.equals("Onboard Employee")) {
 
+					// Call to run the server 
 					new Thread(() -> {
 						try {
 							Server3_Onboarding.main(new String[] {});
@@ -405,6 +489,7 @@ public class GuiClient extends JFrame {
 						}
 					}).start();
 
+					// make it sleep until the server is completely on
 					try {
 						Thread.sleep(20000);
 
@@ -412,6 +497,7 @@ public class GuiClient extends JFrame {
 						e1.printStackTrace();
 					}
 
+					// Calling the RCP client method 
 					onboardEmployee();
 
 				} else {
@@ -423,9 +509,7 @@ public class GuiClient extends JFrame {
 
 		});
 		
-		
-		
-
+		// implementation to print on the text Area 
 		PrintStream printStream = new PrintStream(new OutputStream() {
 			@Override
 			public void write(int b) throws IOException {
@@ -436,10 +520,12 @@ public class GuiClient extends JFrame {
 		System.setErr(printStream);
 		
 
+		// implementation to able the user to close the GUI after stream completed 
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				super.windowClosing(e);
+				
 				// Shutdown the client channels on window close
 				try {
 					clientChannel1.shutdown().awaitTermination(1, TimeUnit.SECONDS);
@@ -462,6 +548,7 @@ public class GuiClient extends JFrame {
 	}
 
 	
+	// JmDNS Client side 
 	public static void testClientJMDNS() {
 	    try {
 	        JmDNS jmdns = JmDNS.create(InetAddress.getLocalHost());
@@ -475,6 +562,8 @@ public class GuiClient extends JFrame {
 	    }
 	}
 	
+	
+	// Service listener to jmdns 
 	private static class SampleListener implements ServiceListener {
 	    public void serviceAdded(ServiceEvent event) {
 	        System.out.println("Service added: " + event.getInfo());
@@ -496,7 +585,10 @@ public class GuiClient extends JFrame {
 	}
 	
 	
-
+//=====================================================================================================================================================================//
+	
+	// RCP Client side implementation 
+	
 	// RCP create Meeting
 	public static void createMeeting() {
 		StreamObserver<CreateMeetingResponse> response = new StreamObserver<CreateMeetingResponse>() {
@@ -538,6 +630,8 @@ public class GuiClient extends JFrame {
 		streamCreatmeeting.onCompleted();
 	}
 
+	
+	
 	// RCP modify Meeting
 	public static void modifyMeeting() {
 		StreamObserver<ModifyMeetingResponse> responsemidy = new StreamObserver<ModifyMeetingResponse>() {
@@ -573,6 +667,8 @@ public class GuiClient extends JFrame {
 		streamomodify.onCompleted();
 	}
 
+	
+	
 	// RCP cancel Meeting
 	public static void cancelMeeting() {
 
@@ -635,6 +731,8 @@ public class GuiClient extends JFrame {
 
 	}
 
+	
+	
 	// unary RPC show room
 	public static void showRoomTemperature() {
 
@@ -646,6 +744,8 @@ public class GuiClient extends JFrame {
 
 	}
 
+	
+	
 	// Bidirectional streaming RPC adjust room
 	public static void adjustRoomTemperature() {
 
@@ -731,6 +831,8 @@ public class GuiClient extends JFrame {
 
 	}
 
+	
+	
 	// Unary RPC
 
 	public static void createEmployee() {
@@ -743,6 +845,9 @@ public class GuiClient extends JFrame {
 
 	}
 
+	
+	
+	
 	// client streaming RPC
 
 	public static void checkEmployeeStatus() {
