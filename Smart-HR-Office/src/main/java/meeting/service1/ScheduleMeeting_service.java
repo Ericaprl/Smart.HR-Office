@@ -1,3 +1,10 @@
+/* 
+ * Class: RPC service 1 - Meeting 
+ * Author @Erica Pereira 
+ * Smart HR office 
+ * gRpc API 
+ * 
+ */
 package meeting.service1;
 
 
@@ -9,6 +16,7 @@ import io.grpc.stub.StreamObserver;
 import meeting.service1.Schedule_MeetingGrpc.Schedule_MeetingImplBase;
 
 
+// Class with only RCP method for the server side
 public class ScheduleMeeting_service  extends Schedule_MeetingImplBase{
 	
 	
@@ -16,6 +24,7 @@ public class ScheduleMeeting_service  extends Schedule_MeetingImplBase{
 
 	
 	// Client Streaming RPC
+	// Create Meeting -It will give to the client a new meeting ID as a response. 
 	
 	@Override 
 	
@@ -42,12 +51,14 @@ public class ScheduleMeeting_service  extends Schedule_MeetingImplBase{
 	                
 	        		 CreateMeetingResponse.Builder response = CreateMeetingResponse.newBuilder();
 	               
+	         		// return success 
+
 	        		 if (isValid) {
 	                     String meetingId = generateMeetingId();
 	                     response.setMeetingId(" Meeting ID:" + " \n " + meetingId)
 	                     .setMessage("\n " + "Meeting created successfully  ");
 
-
+		             // return error 
 	                 
 	        		 } else {
 	                     String errorMsg = "Meeting cannot be created";
@@ -81,6 +92,7 @@ public class ScheduleMeeting_service  extends Schedule_MeetingImplBase{
 	
 	
 	// bidirectional streaming RPC
+	// Modify meeting - It will notify if the meeting is success changed or not.  
 	@Override 
 
 	public StreamObserver<ModifyMeetingRequest> modifyMeeting(StreamObserver<ModifyMeetingResponse> responseObserver) {	
@@ -126,6 +138,7 @@ public class ScheduleMeeting_service  extends Schedule_MeetingImplBase{
 	
 
 	// Server streaming RPC
+	// Cancel meeting  - It will cancel the meeting 
 	@Override
 	public void cancelMeeting(CancelMeetingRequest request, StreamObserver<CancelMeetingResponse> responseObserver) {
 		
@@ -134,13 +147,19 @@ public class ScheduleMeeting_service  extends Schedule_MeetingImplBase{
 		
 		String meetingID = request.getCancelMeetingId();
 		
+		// Logic 
 	    boolean success = true;
 
 	    for ( int i = 0; i<10; i++) {
 	    CancelMeetingResponse.Builder response = CancelMeetingResponse.newBuilder();
 	    
+    		// return success 
+
 	    if (success) {
 	        response.setSuccessCancel("Meeting " + meetingID + " cancelled successfully");
+	        
+        	// return error 
+
 	    } else {
 	        response.setErrorMessage("Sorry, meeting " + meetingID + " cannot be cancelled");
 	    }
