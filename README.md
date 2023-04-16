@@ -14,3 +14,4 @@ The goal is to use this technology to provide our employees with a seamless expe
 
 <img width="484" alt="Screenshot 2023-04-16 at 14 03 16" src="https://user-images.githubusercontent.com/116949403/232336514-eff63d85-18b2-41e0-8e5b-d3084dbe799b.png">
 
+<img width="484" alt="Screenshot 2023-04-16 at 21 41 34" src="https://user-images.githubusercontent.com/116949403/232341037-608ed6e4-aee1-4ff6-a9af-cb509b3e3580.png">
