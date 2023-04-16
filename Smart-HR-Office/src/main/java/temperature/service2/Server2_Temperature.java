@@ -1,3 +1,10 @@
+/* 
+ * Class: Server 2 - Temperature 
+ * Author @Erica Pereira 
+ * Smart HR office 
+ * gRpc API 
+ * 
+ */
 package temperature.service2;
 
 import java.io.FileInputStream;
@@ -12,6 +19,15 @@ import javax.jmdns.ServiceInfo;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
+
+
+/* 
+ * Server side - 2
+ * Call the class service2 where I implement the RPC methods 
+ * discover jmDNS for server side implement 
+ * 
+ */
+
 public class Server2_Temperature {
 	
 	
@@ -21,13 +37,16 @@ public class Server2_Temperature {
 		
 		
 		Properties prop = Server2_Temperature.getProperties();
+		
+		// registration the the services
 		Server2_Temperature .registerService(prop);
 
 
 		int port = Integer.valueOf( prop.getProperty("service_port") );// #.5050;
 
 	
-		
+		// calliing RPC services for server
+
 		try {
 			Server server = ServerBuilder
 				.forPort(port).addService(new RoomTemperature_service())
@@ -47,7 +66,7 @@ public class Server2_Temperature {
 			
 	}	
 	
-	
+    // get the properties file
 	private static Properties getProperties() {
 		
 		Properties prop = null;		
@@ -56,10 +75,8 @@ public class Server2_Temperature {
 
 	            prop = new Properties();
 
-	         // load a properties file
 	            prop.load(input);
 
-	            // get the property value and print it out
 	            System.out.println("Room Temperature Service properies ...");
 	            System.out.println("\t service_type: " + prop.getProperty("service_type"));
 	            System.out.println("\t service_name: " +prop.getProperty("service_name"));
@@ -82,26 +99,26 @@ public class Server2_Temperature {
 	            String service_type = prop.getProperty("service_type") ;//"_temperature._tcp.local.";
 	            String service_name = prop.getProperty("service_name")  ;
 	            int service_port = Integer.valueOf( prop.getProperty("service_port") );// #.5050;
-
-		
-	            String service_description_properties = prop.getProperty("service_description")  ;//"path=index.html";
+	            String service_description_properties = prop.getProperty("service_description")  ;
+	            
+	            
 	            // Register a service
 	            ServiceInfo serviceInfo = ServiceInfo.create(service_type, service_name, service_port, service_description_properties);
 	            jmdns.registerService(serviceInfo);
 	            
 	            System.out.printf("registrering service with type %s and name %s \n", service_type, service_name);
 	            
-	            // Wait a bit
-	            Thread.sleep(1000);
+	          
+	            Thread.sleep(10);
 	            
-	         // Unregister all services
+	     
 	           jmdns.unregisterAllServices();
 	           
 	           
 		  } catch (IOException e) {
 	            System.out.println(e.getMessage());
+	            
 	        } catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		
