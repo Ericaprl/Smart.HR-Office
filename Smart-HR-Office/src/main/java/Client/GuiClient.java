@@ -16,6 +16,7 @@ import javax.swing.border.LineBorder;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 
 import java.awt.Color;
@@ -600,10 +601,15 @@ public class GuiClient extends JFrame {
 			}
 
 			@Override
-			public void onError(Throwable t) {
-				t.printStackTrace();
-
-			}
+			   public void onError(Throwable t) {
+                if (t instanceof StatusRuntimeException) {
+                    StatusRuntimeException statusException = (StatusRuntimeException) t;
+                    System.out.println("Received error from the server: " + statusException.getStatus().getCode()
+                            + " " + statusException.getStatus().getDescription());
+                } else {
+                    t.printStackTrace();
+                }
+            }
 
 			@Override
 			public void onCompleted() {
@@ -644,10 +650,15 @@ public class GuiClient extends JFrame {
 			}
 
 			@Override
-			public void onError(Throwable t) {
-				t.printStackTrace();
-
-			}
+			   public void onError(Throwable t) {
+                if (t instanceof StatusRuntimeException) {
+                    StatusRuntimeException statusException = (StatusRuntimeException) t;
+                    System.out.println("Received error from the server: " + statusException.getStatus().getCode()
+                            + " " + statusException.getStatus().getDescription());
+                } else {
+                    t.printStackTrace();
+                }
+            }
 
 			@Override
 			public void onCompleted() {
@@ -683,10 +694,15 @@ public class GuiClient extends JFrame {
 					}
 
 					@Override
-					public void onError(Throwable t) {
-						t.printStackTrace();
-					}
-
+					   public void onError(Throwable t) {
+		                if (t instanceof StatusRuntimeException) {
+		                    StatusRuntimeException statusException = (StatusRuntimeException) t;
+		                    System.out.println("Received error from the server: " + statusException.getStatus().getCode()
+		                            + " " + statusException.getStatus().getDescription());
+		                } else {
+		                    t.printStackTrace();
+		                }
+		            }
 					@Override
 					public void onCompleted() {
 						System.out.println("Stream completed");
@@ -735,13 +751,18 @@ public class GuiClient extends JFrame {
 	
 	// unary RPC show room
 	public static void showRoomTemperature() {
-
+		try {
 		RoomTemperatureResponse response = blockingStub
 				.showRoomTemperature(RoomTemperatureRequest.newBuilder().setRoomNumber(3).build());
 
 		System.out.println(" Message sent by server:" + "\n" + " Temperature: " + response.getTemperature()
 				+ response.getMessage());
-
+		
+		 } catch (StatusRuntimeException ex) {
+		        System.out.println("Error occurred: " + ex.getStatus().getCode() + " " + ex.getStatus().getDescription());
+		    } catch (Exception ex) {
+		        ex.printStackTrace();
+		    }
 	}
 
 	
@@ -759,10 +780,15 @@ public class GuiClient extends JFrame {
 			}
 
 			@Override
-			public void onError(Throwable t) {
-				t.printStackTrace();
-
-			}
+			   public void onError(Throwable t) {
+                if (t instanceof StatusRuntimeException) {
+                    StatusRuntimeException statusException = (StatusRuntimeException) t;
+                    System.out.println("Received error from the server: " + statusException.getStatus().getCode()
+                            + " " + statusException.getStatus().getDescription());
+                } else {
+                    t.printStackTrace();
+                }
+            }
 
 			@Override
 			public void onCompleted() {
@@ -801,10 +827,15 @@ public class GuiClient extends JFrame {
 			}
 
 			@Override
-			public void onError(Throwable t) {
-				t.printStackTrace();
-
-			}
+			   public void onError(Throwable t) {
+                if (t instanceof StatusRuntimeException) {
+                    StatusRuntimeException statusException = (StatusRuntimeException) t;
+                    System.out.println("Received error from the server: " + statusException.getStatus().getCode()
+                            + " " + statusException.getStatus().getDescription());
+                } else {
+                    t.printStackTrace();
+                }
+            }
 
 			@Override
 			public void onCompleted() {
@@ -837,12 +868,18 @@ public class GuiClient extends JFrame {
 
 	public static void createEmployee() {
 
+		try {
 		CreateEmployeeResponse response = blockingStub2.createEmployee(
 				CreateEmployeeRequest.newBuilder().setUsername("Erica123").setPassword(" Testing321").build());
 
 		System.out
 				.println(" Message sent by server:" + "\n" + " User: " + response.getSuccess() + response.getMessage());
 
+	 } catch (StatusRuntimeException ex) {
+	        System.out.println("Error occurred: " + ex.getStatus().getCode() + " " + ex.getStatus().getDescription());
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	    }
 	}
 
 	
@@ -861,9 +898,15 @@ public class GuiClient extends JFrame {
 			}
 
 			@Override
-			public void onError(Throwable t) {
-				t.printStackTrace();
-			}
+			   public void onError(Throwable t) {
+                if (t instanceof StatusRuntimeException) {
+                    StatusRuntimeException statusException = (StatusRuntimeException) t;
+                    System.out.println("Received error from the server: " + statusException.getStatus().getCode()
+                            + " " + statusException.getStatus().getDescription());
+                } else {
+                    t.printStackTrace();
+                }
+            }
 
 			@Override
 			public void onCompleted() {
