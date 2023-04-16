@@ -1,4 +1,10 @@
-package onboarding.service3;
+/* 
+ * Class: RPC service 3 - Onboarding 
+ * Author @Erica Pereira 
+ * Smart HR office 
+ * gRpc API 
+ * 
+ */package onboarding.service3;
 
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
@@ -6,9 +12,13 @@ import io.grpc.stub.StreamObserver;
 import onboarding.service3.Onboarding_employeesGrpc.Onboarding_employeesImplBase;
 
 
+//Class with only RCP method for the server side
+
 public class Onboarding_service extends Onboarding_employeesImplBase {
 
+	
 	// bidirectional streamin RPC
+	//  onboard Employee - It will inform status of the onboarding process 
 
 	@Override
 	public StreamObserver<OnboardingRequest> onboardEmployee(StreamObserver<OnboardingResponse> responseObserver) {
@@ -55,6 +65,7 @@ public class Onboarding_service extends Onboarding_employeesImplBase {
 	}
 
 	// Unary RPC
+	// Create Employee - It will create a user for the new employee 
 
 	@Override
 	public void createEmployee(CreateEmployeeRequest request, StreamObserver<CreateEmployeeResponse> responseObserver) {
@@ -68,9 +79,13 @@ public class Onboarding_service extends Onboarding_employeesImplBase {
 
 		CreateEmployeeResponse.Builder response = CreateEmployeeResponse.newBuilder();
 
+		// return success
+
 		if (username.equals(password)) {
 
 			response.setSuccess(false).setMessage("Invalid username or password");
+
+			// return error
 
 		} else {
 
@@ -84,6 +99,7 @@ public class Onboarding_service extends Onboarding_employeesImplBase {
 	}
 
 	// client streaming RPC
+	// check EmployeeStatus - It will response if the employee status on the company.
 
 	@Override
 	public StreamObserver<EmployeeStatusRequest> checkEmployeeStatus(
@@ -96,12 +112,19 @@ public class Onboarding_service extends Onboarding_employeesImplBase {
 
 				System.out.println(" -- Receiving Employee status request from client -- ");
 
+				
+				// Logic 
 				boolean isActive = request.getEmployeeId() != null;
 
 				EmployeeStatusResponse.Builder emplpResponse = EmployeeStatusResponse.newBuilder();
+				
+				// return success
+
 				if (isActive) {
 					emplpResponse.setEmployeeId(" Employee ID:" + request.getEmployeeId())
 							.setIsEmployeeActive(isActive);
+
+					// return error
 
 				} else {
 					String errorMsg = "Employee is inactive";
@@ -125,6 +148,7 @@ public class Onboarding_service extends Onboarding_employeesImplBase {
 		};
 	}
 
+	// Logic for Onboarding method 
 	private boolean performOnboardingLogic(Employee employee) {
 		String name = employee.getName();
 		String email = employee.getEmail();
@@ -138,6 +162,7 @@ public class Onboarding_service extends Onboarding_employeesImplBase {
 
 	}
 
+	// email validation method  
 	private boolean isValidEmail(String email) {
 		String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
 		return email.matches(emailRegex);
