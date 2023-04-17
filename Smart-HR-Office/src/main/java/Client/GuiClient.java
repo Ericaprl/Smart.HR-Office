@@ -62,6 +62,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 import java.awt.event.ActionEvent;
 
@@ -107,10 +108,12 @@ public class GuiClient extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 
-		// calling JmDNS client side 
-		testClientJMDNS();
+		// calling Service Discovery JmDNS client side 
+	
+		clientJMDNS();
+		
 
 
 		// create the Channel between client and server
@@ -549,19 +552,6 @@ public class GuiClient extends JFrame {
 	}
 
 	
-	// JmDNS Client side 
-	public static void testClientJMDNS() {
-	    try {
-	        JmDNS jmdns = JmDNS.create(InetAddress.getLocalHost());
-
-	        jmdns.addServiceListener(host, new SampleListener());
-
-	        Thread.sleep(10);
-
-	    } catch (Exception e) {
-	        System.out.println(e.getMessage());
-	    }
-	}
 	
 	
 	// Service listener to jmdns 
@@ -585,7 +575,26 @@ public class GuiClient extends JFrame {
 	    }
 	}
 	
+	// JmDNS Client side 
+		public static void clientJMDNS() {
+		    try {
+		        JmDNS jmdns = JmDNS.create(InetAddress.getLocalHost());
+
+		        jmdns.addServiceListener("_http._tcp.local.", new SampleListener());
+
+		        Thread.sleep(1000);
+		        jmdns.close();
+		    } catch (UnknownHostException e) {
+	            System.out.println(e.getMessage());
+	        
+		    } catch (Exception e) {
+		        System.out.println(e.getMessage());
+		    }
+		}
+		
 	
+	
+            
 //=====================================================================================================================================================================//
 	
 	// RCP Client side implementation 
