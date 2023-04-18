@@ -16,8 +16,6 @@ import java.util.Properties;
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
 
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
@@ -43,13 +41,7 @@ public class Server1_meeting extends Schedule_MeetingImplBase{
 
 	public static void main ( String[] args) throws InterruptedException, IOException {
 		
-	      ManagedChannel clientChannel = ManagedChannelBuilder.forAddress("localhost",port)
-	        		.usePlaintext()
-	        		.build();
-
-	        
-			nonblockingstub = Schedule_MeetingGrpc.newStub(clientChannel);
-				
+	
 		Properties prop = Server1_meeting.getProperties();
 		
 		// registration the the services
