@@ -82,7 +82,7 @@ import javax.swing.JScrollBar;
 
 
 // Class with client RPC side implementation and GUI 
-public class GuiClient extends JFrame {
+public class Gui_hrOffice extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -112,7 +112,7 @@ public class GuiClient extends JFrame {
 
 		// calling Service Discovery JmDNS client side 
 	
-		clientJMDNS();
+		discoverJMDNS();
 		
 
 
@@ -150,7 +150,7 @@ public class GuiClient extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public GuiClient() {
+	public Gui_hrOffice() {
 		setType(Type.UTILITY);
 		setBackground(new Color(86, 18, 87));
 		setForeground(new Color(86, 18, 87));
@@ -576,11 +576,12 @@ public class GuiClient extends JFrame {
 	}
 	
 	// JmDNS Client side 
-		public static void clientJMDNS() {
+		public static void discoverJMDNS() {
 		    try {
 		        JmDNS jmdns = JmDNS.create(InetAddress.getLocalHost());
+	            System.out.println("Discovery JmDNS Listening");
 
-		        jmdns.addServiceListener("_http._tcp.local.", new SampleListener());
+		        jmdns.addServiceListener(host, new SampleListener());
 
 		        Thread.sleep(1000);
 		        jmdns.close();
