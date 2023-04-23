@@ -3,6 +3,7 @@ gRPC API
 
 - Grpc, jmDNS, RPC and GUI implementation by Erica
 
+- Presentation: https://www.youtube.com/watch?v=HlOkW7xsrgc
 
 - The Smart HR Office is dedicated to providing employees (clients) with efficient services by utilizing remote procedure call (RPC) methods. 
 This software communication protocol allows programs running on different machines on a network to request services without understanding the network's technicalities. 
